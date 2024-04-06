@@ -26,11 +26,33 @@ app.get("/api/hello", function (req, res) {
 });
 
 app.get('/api/:date',(req,res)=>{
+  var reqDate = req.params.date;
 
-  const date = new Date(req.params.date);
-  console.log(date)
+  if(!isNaN(reqDate)) reqDate = parseInt(reqDate);
 
-res.json({unix: date.getTime(), utc: ''})
+  const date = reqDate ? new Date(reqDate): new Date()  ;
+
+  if(date =="Invalid Date")  return res.json({error: "Invalid Date"})
+
+  const unix = date.getTime();
+  const utc = date.toUTCString();
+  
+
+res.json({unix, utc})
+})
+
+
+app.get('/api',(req,res)=>{
+  var reqDate = req.params.date;
+
+  var date = reqDate ? new Date(reqDate): new Date()  ;
+  date = date.getTime() + 20000
+  date  = new Date(date)
+  const unix = date.getTime();
+  const utc = date.toUTCString();
+  
+
+res.json({unix, utc})
 })
 
 
